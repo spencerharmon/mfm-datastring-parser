@@ -33,3 +33,5 @@
   - I shouldn't do that before I find out if there is another method to retrieve the data other than the current method in the mfms patch.
 
   -Found another problem: the file output from MFM isn't valid json since there's a trailing comma in the site list. Will fix..
+  - update: fixed the above problem. https://github.com/spencerharmon/MFM/commit/d678f829643d43c17164bd59406d244604a408b3
+  
