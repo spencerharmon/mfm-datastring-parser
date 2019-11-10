@@ -13,11 +13,10 @@ class GridData(object):
         return [site.get_dict() for site in self.sitelist]
 
     def load_file(self, path):
-        file = open(path, 'r')
-        sites = json.loads(self.file)
-        for s in sites:
-            self.sitelist.append(SiteData(s))
-        file.close()
+        with open(path) as file:
+            sites = json.loads(file.read())
+            for s in sites:
+                self.sitelist.append(SiteData(s))
 
     def load_json_string(self, string):
         sites = json.loads(string)

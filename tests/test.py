@@ -1,4 +1,5 @@
 from tests import mock_data
+from tests import file1_output
 from src.grid_data import GridData
 from src.site_data import SiteData
 import json
@@ -26,6 +27,11 @@ class ParseTest(unittest.TestCase):
         s = GridData()
         s.load_json_string(mock_data.testgrid)
         self.assertEqual(s.get_grid_state(), mock_data.testgrid_list)
+
+    def test_file(self):
+        gd = GridData()
+        gd.load_file('tests/file1.save')
+        self.assertEqual(file1_output.filetest_out, gd.get_grid_state())
 
 
 if __name__ == '__main__':

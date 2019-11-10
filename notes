@@ -31,3 +31,5 @@
   - My biggest complaint with the current state of the deserializer output is that it's not type-aware. That is: the value of all data members is string type.
   - I could possibly address the above with some simple string matching after the existing parsing and default to string if the type isn't completely obvious.
   - I shouldn't do that before I find out if there is another method to retrieve the data other than the current method in the mfms patch.
+
+  -Found another problem: the file output from MFM isn't valid json since there's a trailing comma in the site list. Will fix..
