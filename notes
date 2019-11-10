@@ -1,0 +1,33 @@
+11/3/2019
+  -I made a patch for MFM yesterday that may pass for parsing grid data with an external application like this one.
+  -There are a couple of remaining issues to address:
+    1. the initial hope was to export the data members and element type information of the entire grid state in a parsable format.
+       instead, what we got was something like this (ellipses added):
+          [...,{"x":87, "y":17, "symbol":"EC", "name":"EComOut", "argb":-1, "data_string":"(age=(time=0),value=0)"},...]
+       The result is a list of json objects that contains element data, cool. However, the data_string field containing the
+       data members of this atom is itself not in json format and needs further parsing. Bummer.
+
+    2. Some long data_string output appears consistently truncated, namely EMM-Cell's ETreeGeneInfo:
+
+       {"x":80, "y":17, "symbol":"ET", "name":"ETreeGeneInfo", "argb":-26317, "data_string":"(age=(time=2),geneIDInUse=[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false,[11]=false,[12]=false,[13]=false,[14]=false,[15]=false,[16]=false,[17]=false,[18]=false,[19]=false,[20]=false,[21]=false,[22]=false,[23]=false,[24]=false,[25]=false,[26]=false,[27]=false,[28]=false,[29]=false,[30]=false,[31]=false,[32]=false,[33]=false,[34]=false,[35]=false,[36]=false,[37]=false,[38]=false,[39]=false,[40]=false,[41]=false,[42]=false,[43]=false,[44]=false,[X"},
+
+       Notice how the data member geneIDInUse breaks its pattern and abruptly stops with an 'X'. This data member is, in fact,
+       a list (array?) of 64 booleans.
+
+    3. I attempted to create another option in the MFM to output the base layer in the same format, but that didn't pan out.
+       The method that appears to do this, grid.GetAtomInSite, outputs a const. I'm not sure if that's a problem in itself,
+       but the result before switching to grid.GetWriteableAtom was a file in which all atoms were Empty.
+
+  - The current plan is to take what we can get and focus on parsing the structure of the data_string with python rather than
+    trying to serialize it into json in C++. Admittedly, maybe the latter is the right thing.
+
+  - What I think I know about the data string:
+    - long data strings are truncated with an X.
+    - the data string is wrapped in parentheses unless truncated as above.
+    - inherited data members are wrapped in parentheses. 
+
+11/9/2019
+  - Just got some passable output for a few unique test cases from the output of a run of EMM-Cell. All of the above cases with respect to the data_string are apparently addressed.
+  - My biggest complaint with the current state of the deserializer output is that it's not type-aware. That is: the value of all data members is string type.
+  - I could possibly address the above with some simple string matching after the existing parsing and default to string if the type isn't completely obvious.
+  - I shouldn't do that before I find out if there is another method to retrieve the data other than the current method in the mfms patch.
