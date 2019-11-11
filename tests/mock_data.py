@@ -117,31 +117,45 @@ site3_dict = {
 
 #test 3-site grid..
 testgrid = '''
-[
+{"grid_configuration":{"grid_is_staggered":true, "grid_height":64, "grid_width":130},
+"tile_configuration":{"event_window_radius":4, "tile_height":40, "tile_width":60, "owned_height":32, "owned_width":52},
+"non_empty_site_list": [
 {"x":0, "y":0, "symbol":"E", "name":"Empty", "argb":-16777216, "data_string":""},
 {"x":1, "y":0, "symbol":"E", "name":"Empty", "argb":-16777216, "data_string":""},
 {"x":2, "y":0, "symbol":"E", "name":"Empty", "argb":-16777216, "data_string":""}
-]
+]}
 '''
 
-testgrid_list = [{'argb': -16777216,
-  'data_members': None,
-  'data_string_truncated': False,
-  'name': 'Empty',
-  'symbol': 'E',
-  'x': 0,
-  'y': 0},
- {'argb': -16777216,
-  'data_members': None,
-  'data_string_truncated': False,
-  'name': 'Empty',
-  'symbol': 'E',
-  'x': 1,
-  'y': 0},
- {'argb': -16777216,
-  'data_members': None,
-  'data_string_truncated': False,
-  'name': 'Empty',
-  'symbol': 'E',
-  'x': 2,
-  'y': 0}]
+testgrid_out = {
+    "grid_configuration": {"grid_is_staggered": True, "grid_height": 64, "grid_width": 130},
+    "tile_configuration": {
+        "event_window_radius": 4,
+        "tile_height": 40,
+        "tile_width": 60,
+        "owned_height": 32,
+        "owned_width": 52
+    },
+    "non_empty_site_list": [
+        {'argb': -16777216,
+          'data_members': None,
+          'data_string_truncated': False,
+          'name': 'Empty',
+          'symbol': 'E',
+          'x': 0,
+          'y': 0},
+         {'argb': -16777216,
+          'data_members': None,
+          'data_string_truncated': False,
+          'name': 'Empty',
+          'symbol': 'E',
+          'x': 1,
+          'y': 0},
+         {'argb': -16777216,
+          'data_members': None,
+          'data_string_truncated': False,
+          'name': 'Empty',
+          'symbol': 'E',
+          'x': 2,
+          'y': 0}
+    ]
+}

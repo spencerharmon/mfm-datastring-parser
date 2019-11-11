@@ -26,12 +26,19 @@ class ParseTest(unittest.TestCase):
     def test_grid(self):
         s = GridData()
         s.load_json_string(mock_data.testgrid)
-        self.assertEqual(s.get_grid_state(), mock_data.testgrid_list)
+        self.assertEqual(s.get_grid_state(), mock_data.testgrid_out)
 
     def test_file(self):
         gd = GridData()
         gd.load_file('tests/file1.save')
-        self.assertEqual(file1_output.filetest_out, gd.get_grid_state())
+        self.assertEqual(file1_output.file1_dict, gd.get_grid_state())
+
+    def test_file_json(self):
+        gd = GridData()
+        gd.load_file('tests/file1.save')
+        self.assertEqual(
+            json.loads(file1_output.file1_json),
+            json.loads(gd.get_json()))
 
 
 if __name__ == '__main__':
