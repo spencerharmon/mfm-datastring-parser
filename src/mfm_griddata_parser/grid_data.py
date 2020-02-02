@@ -1,5 +1,5 @@
 import json
-from src.site_data import SiteData
+from .site_data import SiteData
 
 
 class GridData(object):

@@ -1,4 +1,4 @@
-from src.exceptions import DataMemberDataError
+from .exceptions import DataMemberDataError
 import re
 
 

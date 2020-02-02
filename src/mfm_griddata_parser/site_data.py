@@ -1,5 +1,5 @@
 import json
-from src.data_member_data import DataMemberData
+from .data_member_data import DataMemberData
 
 
 class SiteData(object):
