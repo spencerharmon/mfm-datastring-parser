@@ -2,6 +2,7 @@ from .grid_data import GridData
 import logging
 logger = logging.getLogger(__name__)
 
+
 class MatchCompareFunctions:
     def __call__(self, result_grid: list, match: dict):
         """
@@ -15,7 +16,7 @@ class MatchCompareFunctions:
             "equal_to": self.equal_to,
             "greateq": self.greateq,
             "lesseq": self.lesseq,
-            }
+        }
         result = []
         for key in func.keys():
             if key in match.keys():
@@ -29,26 +30,27 @@ class MatchCompareFunctions:
     def greater_than(self, value):
         logger.debug(f'greater_than: {len(self.result_grid)}, {value}')
         return len(self.result_grid) > value
-    
+
     def less_than(self, value):
         return len(self.result_grid) < value
-    
+
     def equal_to(self, value):
         return len(self.result_grid) == value
-    
+
     def greateq(self, value):
         return len(self.result_grid) >= value
-    
+
     def lesseq(self, value):
         return len(self.result_grid) <= value
-    
 
-    
+
 class GridSearch:
     """
-    
+
     """
+
     def __call__(self, grid: GridData, match: dict):
+        self.grid = grid
         # event layer by default
         self.filtered_grid = grid.event_layer_atoms
         # support for the "base" key in the match object.
@@ -56,13 +58,15 @@ class GridSearch:
             if match.pop("base"):
                 self.filtered_grid = grid.base_layer_atoms
 
-        #lay out all of the searchable fields and their search functions
+        # lay out all of the searchable fields and their search functions
         func = {
             "name": self.name_filter,
             "symbol": self.name_filter,
             "argb": self.argb_filter,
             "data_members": self.data_members_filter,
-            }
+            "after": self.after_filter,
+            "before": self.before_filter
+        }
         for key in match.keys():
             if key in func.keys():
                 # execute the filter function
@@ -73,7 +77,7 @@ class GridSearch:
                 else:
                     logger.warning(f"Invalid search key: {key}")
         logger.debug([site.get_dict() for site in self.filtered_grid])
-        
+
         process_result = MatchCompareFunctions()
         return process_result(self.filtered_grid, match)
 
@@ -98,3 +102,12 @@ class GridSearch:
     def data_members_filter(self, data_members):
         logger.error("Data member filter not implemented.")
                
+
+    def after_filter(self, aeps):
+        if self.grid.simulation_age < aeps:
+            self.filtered_grid = []
+
+    def before_filter(self, aeps):
+        if self.grid.simulation_age > aeps:
+            self.filtered_grid = []
+
