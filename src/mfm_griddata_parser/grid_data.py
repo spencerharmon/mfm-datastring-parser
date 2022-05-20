@@ -1,4 +1,5 @@
 import json
+import leximited
 from .atoms import Empty, Atom
 from .site_data import SiteData
 
@@ -17,11 +18,12 @@ class GridData(object):
         self.event_layer_atoms = []
         self.base_layer_atoms = []
         self.load_file(mfm_grid_state_json_file)
-        self.event_layer_atom_data = self.flip_xy(self.get_grid_state()["event_layer_atoms"])
+        self.event_layer_atom_data = self.flip_xy(
+            self.get_grid_state()["event_layer_atoms"])
         self.event_layer_index = self.index_atoms()
-        self.base_layer_atom_data = self.flip_xy(self.get_grid_state()["base_layer_atoms"])
+        self.base_layer_atom_data = self.flip_xy(
+            self.get_grid_state()["base_layer_atoms"])
         self.base_layer_index = self.index_atoms(base=True)
-
 
     def gen_2d_grid_list(self, init):
         """
@@ -40,8 +42,9 @@ class GridData(object):
             atom_data = self.base_layer_atom_data
         else:
             atom_data = self.event_layer_atom_data
-        
-        two_d_list = self.gen_2d_grid_list(self.atom_factory({"name": "Empty"}))
+
+        two_d_list = self.gen_2d_grid_list(
+            self.atom_factory({"name": "Empty"}))
         i = 0
         for a in two_d_list[0]:
             i += 1
@@ -58,12 +61,12 @@ class GridData(object):
             tmp_y = ad["x"]
             ad.update({"x": tmp_x, "y": tmp_y})
         return atom_data
-    
+
     def atom_factory(self, atom_dict):
         """
         return a special atom class type (should be used only for type hinting) or a generic atom
         """
-        for k,v in self.get_atom_types().items():
+        for k, v in self.get_atom_types().items():
             if atom_dict["name"] == k:
                 return v(atom_dict)
         return Atom(atom_dict)
@@ -116,7 +119,7 @@ class GridData(object):
 
     def load_json_string(self, string):
         doc = json.loads(string)
-        self.simulation_age = doc['simulation_age']
+        self.simulation_age = leximited.from_leximited(doc['simulation_age'])
         self.grid_is_staggered = doc['grid_configuration']['grid_is_staggered']
         self.grid_height = doc['grid_configuration']['grid_height']
         self.grid_width = doc['grid_configuration']['grid_width']
@@ -129,8 +132,7 @@ class GridData(object):
         event_layer_sites = doc['event_layer_atoms']
         for s in event_layer_sites:
             self.event_layer_atoms.append(SiteData(s))
-            
+
         base_layer_sites = doc['base_layer_atoms']
         for s in base_layer_sites:
             self.base_layer_atoms.append(SiteData(s))
-
