@@ -119,7 +119,8 @@ class GridData(object):
 
     def load_json_string(self, string):
         doc = json.loads(string)
-        self.simulation_age = leximited.from_leximited(doc['simulation_age'])
+        self.simulation_age = leximited.from_leximited_int(
+            doc['simulation_age'])
         self.grid_is_staggered = doc['grid_configuration']['grid_is_staggered']
         self.grid_height = doc['grid_configuration']['grid_height']
         self.grid_width = doc['grid_configuration']['grid_width']
