@@ -85,29 +85,43 @@ class GridSearch:
         """
         remove atoms from the grid that don't match our name.
         """
-        self.filtered_grid = [site for site in self.filtered_grid if site.name == name]
+        logger.debug(
+            "[name filter]  %s", name
+        )
+        self.filtered_grid = [
+            site for site in self.filtered_grid if site.name == name]
 
     def symbol_filter(self, symbol):
         """
         remove atoms that don't match our symbol
         """
-        self.filtered_grid = [site for site in self.filtered_grid if site.symbol == symbol]
-       
+        self.filtered_grid = [
+            site for site in self.filtered_grid if site.symbol == symbol]
+
     def argb_filter(self, argb):
         """
         remove atoms from the grid that don't match our color
         """
-        self.filtered_grid = [site for site in self.filtered_grid if site.argbname == argb]
+        self.filtered_grid = [
+            site for site in self.filtered_grid if site.argbname == argb]
 
     def data_members_filter(self, data_members):
         logger.error("Data member filter not implemented.")
-               
 
     def after_filter(self, aeps):
+        logger.debug(
+            "[after filter] simulation age %s; threshold %s",
+            self.grid.simulation_age,
+            aeps
+        )
         if self.grid.simulation_age < aeps:
             self.filtered_grid = []
 
     def before_filter(self, aeps):
+        logger.debug(
+            "[before filter] simulation age %s; threshold %s",
+            self.grid.simulation_age,
+            aeps
+        )
         if self.grid.simulation_age > aeps:
             self.filtered_grid = []
-
