@@ -67,16 +67,19 @@ class GridSearch:
             "after": self.after_filter,
             "before": self.before_filter
         }
+        self.return_false = False
         for key in match.keys():
             if key in func.keys():
                 # execute the filter function
                 func[key](match[key])
+                if self.return_false:
+                    return False
+
             else:
                 if hasattr(MatchCompareFunctions, key):
                     continue
                 else:
                     logger.warning(f"Invalid search key: {key}")
-        logger.debug([site.get_dict() for site in self.filtered_grid])
 
         process_result = MatchCompareFunctions()
         return process_result(self.filtered_grid, match)
@@ -115,7 +118,7 @@ class GridSearch:
             aeps
         )
         if self.grid.simulation_age < aeps:
-            self.filtered_grid = []
+            self.return_false = True
 
     def before_filter(self, aeps):
         logger.debug(
@@ -124,4 +127,4 @@ class GridSearch:
             aeps
         )
         if self.grid.simulation_age > aeps:
-            self.filtered_grid = []
+            self.return_false = True
